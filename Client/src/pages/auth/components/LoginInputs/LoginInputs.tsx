@@ -1,3 +1,5 @@
+import { FloatLabel } from "primereact/floatlabel";
+import { InputText } from "primereact/inputtext";
 import styles from "./LoginInputs.module.css";
 
 type LoginInputsProps = {
@@ -15,24 +17,26 @@ const LoginInputs = ({
 }: LoginInputsProps) => {
   return (
     <>
-      <div className={styles.inputWrapper}>
-        <input
+      <FloatLabel className={styles.inputWrapper}>
+        <InputText
           tabIndex={1}
+          id="username"
           value={userNameTxt}
           onChange={(e) => setUserName(e.target.value)}
-          placeholder="نام کاربری"
         />
-      </div>
+        <label htmlFor="username">نام کاربری</label>
+      </FloatLabel>
 
-      <div className={styles.inputWrapper}>
-        <input
+      <FloatLabel className={styles.inputWrapper}>
+        <InputText
           tabIndex={2}
-          type="password"
+          id="password"
           value={passwordTxt}
+          type="password"
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="رمز عبور"
         />
-      </div>
+        <label htmlFor="password">رمز عبور</label>
+      </FloatLabel>
     </>
   );
 };

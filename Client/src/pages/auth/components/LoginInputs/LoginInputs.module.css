@@ -1,9 +1,10 @@
 .inputWrapper {
-  width: 100%;
-  margin-bottom: 10px;
-  position: relative;
+  text-align: right;
+  margin-bottom: 1rem;
+  height: 50px;
 }
 
-.inputWrapper input {
+.inputWrapper label {
   padding-right: 40px;
+  transition: all 0.3s ease;
 }

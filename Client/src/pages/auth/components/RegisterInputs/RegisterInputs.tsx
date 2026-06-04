@@ -1,4 +1,7 @@
+import { FloatLabel } from "primereact/floatlabel";
 import styles from "./RegisterInputs.module.css";
+import { InputText } from "primereact/inputtext";
+import { Message } from "primereact/message";
 
 type RegisterInputsProps = {
   userNameTxt: string;
@@ -23,47 +26,56 @@ const RegisterInputs = ({
 }: RegisterInputsProps) => {
   return (
     <>
-      <div className={styles.inputWrapper}>
-        <input
-          tabIndex={1}
-          value={userNameTxt}
-          onChange={(e) => {
-            setUserName(e.target.value);
-            setError("");
-            setUsernameAvailable(false);
-          }}
-          placeholder="نام کاربری"
-          autoComplete="username"
-        />
-
-        {userNameTxt.trim() !== "" && (
-          <div className={styles.fieldHint}>
-            {isCheckingUsername ? (
-              <span>در حال بررسی نام کاربری...</span>
-            ) : isUserNameAvailable === true ? (
-              <span className={styles.validMsg}>نام کاربری آزاد است</span>
-            ) : isUserNameAvailable === false ? (
-              <span className={styles.invalidMsg}>
-                این نام کاربری قبلاً انتخاب شده است
-              </span>
-            ) : null}
-          </div>
-        )}
+      <div className={styles.userNameWrapper}>
+        <FloatLabel className={styles.inputWrapper}>
+          <InputText
+            tabIndex={1}
+            id="username"
+            value={userNameTxt}
+            autoComplete="username"
+            onChange={(e) => {
+              setUserName(e.target.value);
+              setError("");
+              setUsernameAvailable(false);
+            }}
+          />
+          <label htmlFor="username">نام کاربری</label>
+          {userNameTxt.trim() !== "" && (
+            <div className={styles.fieldHint}>
+              {isCheckingUsername ? (
+                <Message severity="info" text="در حال بررسی نام کاربری..." />
+              ) : isUserNameAvailable === true ? (
+                <Message
+                  className={styles.validMsg}
+                  severity="success"
+                  text="نام کاربری آزاد است."
+                />
+              ) : isUserNameAvailable === false ? (
+                <Message
+                  className={styles.invalidMsg}
+                  severity="error"
+                  text="این نام کاربری قبلاً انتخاب شده است."
+                />
+              ) : null}
+            </div>
+          )}
+        </FloatLabel>
       </div>
 
-      <div className={styles.inputWrapper}>
-        <input
+      <FloatLabel className={styles.inputWrapper}>
+        <InputText
           tabIndex={2}
+          id="password"
           value={passwordTxt}
+          type="password"
+          autoComplete="new-password"
           onChange={(e) => {
             setPassword(e.target.value);
             setError("");
           }}
-          placeholder="رمز عبور"
-          type="password"
-          autoComplete="new-password"
         />
-      </div>
+        <label htmlFor="password">رمز عبور</label>
+      </FloatLabel>
     </>
   );
 };
