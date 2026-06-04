@@ -12,6 +12,14 @@
   animation: slideIn 0.3s ease-out;
 }
 
+input {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
 .actionBtnsContainer {
   width: 100%;
   display: flex;

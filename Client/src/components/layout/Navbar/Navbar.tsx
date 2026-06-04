@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
     <nav
       ref={ref}
       className={styles.navbar}
-      style={{ width: isDesktop ? (hovering ? "150px" : "70px") : "100%" }}
+      style={{ width: isDesktop ? (hovering ? "200px" : "70px") : "100%" }}
     >
       <SearchPanel
         togglePanel={toggleSearchPanel}

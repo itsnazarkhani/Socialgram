@@ -15,8 +15,11 @@
 
 .navbar {
   position: fixed;
-  bottom: 0;
-  width: 100%;
+  bottom: 16px;
+  width: 90%;
+  left: calc(50% - 90% / 2);
+  background-color: transparent;
+  overflow: hidden;
   display: flex;
   min-height: 0;
   z-index: 1000;
@@ -39,8 +42,9 @@
     width: fit-content;
     min-width: 70px;
     right: 0;
+    bottom: 0;
     height: 100vh;
-    overflow: hidden;
+    left: initial;
   }
 
   .content {
