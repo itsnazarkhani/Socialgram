@@ -6,10 +6,6 @@
   overflow-y: hidden;
 }
 
-.topbar {
-  height: 55px;
-}
-
 .mainContainer {
   flex: 1;
   display: flex;
@@ -43,15 +39,11 @@
     width: fit-content;
     min-width: 70px;
     right: 0;
-    height: calc(100vh - 65px);
+    height: 100vh;
     overflow: hidden;
   }
 
   .content {
     margin-right: 70px;
-  }
-
-  .topbar {
-    height: 65px;
   }
 }
