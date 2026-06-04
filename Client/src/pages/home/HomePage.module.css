@@ -1,0 +1,9 @@
+.page {
+  gap: 16px;
+}
+
+@media (min-width: 769px) {
+  .page {
+    gap: 48px;
+  }
+}

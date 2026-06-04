@@ -105,10 +105,10 @@ namespace Socialgram.Controllers
             .Select(p => new
             {
                 p.Id,
-                MediaId = p.MediaFile!.Id
+                ViewCount = p.PostViews.Count
             })
             .ToList()
-            .Select(p => new PostListItemDto(p.Id, p.MediaId)));
+            .Select(p => new PostListItemDto(p.Id, p.ViewCount)));
 
         [HttpGet("followings")]
         public async Task<IActionResult> GetFollowingsPosts()
@@ -296,7 +296,7 @@ namespace Socialgram.Controllers
                                     c.Id,
                                     c.UserId,
                                     c.User!.UserName!,
-                                    c.Text?? "",
+                                    c.Text ?? "",
                                     c.UserId == userId,
                                     c.CreatedAt));
 

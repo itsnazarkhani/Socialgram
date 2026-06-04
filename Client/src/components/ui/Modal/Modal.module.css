@@ -54,6 +54,10 @@
   font-size: 16px;
   font-weight: 800;
   flex: 1;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif !important;
+    font-weight: bold;
 }
 
 .closeBtn {

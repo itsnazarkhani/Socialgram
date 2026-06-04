@@ -1,7 +1,14 @@
+import { useEffect, useRef, useState } from "react";
+import { MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import type {
   CreateCommentDto,
   CommentListItemDto,
 } from "../../../../dtos/commentDtos";
+import type { PostDto } from "../../../../dtos/postDtos";
+import useIsDesktop from "../../../../hooks/useIsDesktop";
+import type { CommentData } from "../../../../interfaces/commentInterfaces";
+import type { ContextMenuItemData } from "../../../../interfaces/menuInterfaces";
 import type {
   PostWithDisplayData,
   PostCounters,
@@ -9,40 +16,29 @@ import type {
 import { commentService } from "../../../../services/commentService";
 import { postService } from "../../../../services/postService";
 import { userService } from "../../../../services/userService";
-import BlobAvatar from "../../../ui/Image/BlobAvatar";
+import styles from "./PostCard.module.css";
 import BlobImage from "../../../ui/Image/BlobImage";
-import Modal from "../../../ui/Modal/Modal";
-import type { CommentData } from "../../../../interfaces/commentInterfaces";
 import CommentForm from "../../commenting/CommentForm/CommentForm";
-import "./PostCard.css";
-import { useEffect, useState } from "react";
-import LikeButton from "../../../ui/Buttons/LikeButton/LikeButton";
 import CommentList from "../../commenting/CommentList/CommentList";
 import CommentsModal from "../../commenting/CommentsModal/CommentsModal";
+import PostCaption from "../PostCaption/PostCaption";
+import ViewMeta from "../ViewMeta/ViewMeta";
+import PostHeader from "../PostHeader/PostHeader";
+import LikeMeta from "../LikeMeta/LikeMeta";
 
 type PostCardProps = {
-  post: PostWithDisplayData;
-  postCounters: {
-    viewCount: 0;
-    likeCount: 0;
-  };
-  isLiked: boolean;
-  onNavigate: (userId: string) => void;
-  onLikeToggle: (postId: string) => void;
-  setPostRef: (postId: string) => (el: HTMLDivElement | null) => void;
+  id?: string;
 };
 
-const PostCard = ({
-  post,
-  postCounters,
-  isLiked,
-  onNavigate,
-  onLikeToggle,
-  setPostRef,
-}: PostCardProps) => {
-  const [currentPost, setCurrentPost] = useState<PostWithDisplayData>();
-  const counters = postCounters[post.id] || { viewCount: 0, likeCount: 0 };
+const PostCard = ({ id }: PostCardProps) => {
+  const navigate = useNavigate();
+  const isDesktop = useIsDesktop(769);
 
+  const [post, setPost] = useState<PostWithDisplayData>();
+  const [postCounters, setPostCounters] = useState<PostCounters>({});
+  const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const [comments, setComments] = useState<CommentData[]>([]);
@@ -53,22 +49,142 @@ const PostCard = ({
   const [isPostingAComment, setIsPostingAComment] = useState<boolean>(false);
 
   useEffect(() => {
-    setCurrentPost(post);
+    if (isCommentsListModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isCommentsListModalOpen]);
+
+  const hasFetchedRef = useRef(false);
+
+  useEffect(() => {
+    if (!id) {
+      setError("خطا در بارگذاری پست: شناسه پست نامعتبر است.");
+      return;
+    }
+    const fetchPostAndMedia = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const fetchedPost: PostDto = await postService.getPostById(
+          id as string,
+        );
+
+        const initialCounters: PostCounters = {};
+
+        let mediaBlob: Blob | undefined = undefined;
+        let avatarBlob: Blob | undefined = undefined;
+
+        try {
+          mediaBlob = await postService.getMedia(fetchedPost.id);
+        } catch (mediaError) {
+          console.error(
+            `Error fetching media for post ${fetchedPost.id}:`,
+            mediaError,
+          );
+        }
+
+        if (fetchedPost.postOwnerId) {
+          try {
+            avatarBlob = await userService.getAvatar(fetchedPost.postOwnerId);
+          } catch (avatarError: any) {
+            if (avatarError?.response?.status == 404) avatarBlob = undefined;
+            else throw avatarError;
+          }
+        }
+
+        initialCounters[fetchedPost.id] = {
+          viewCount: fetchedPost.viewCount ?? 0,
+          likeCount: fetchedPost.likeCount ?? 0,
+        };
+
+        setLikedMap((prev) => ({
+          ...prev,
+          [fetchedPost.id]: fetchedPost.didYouLiked,
+        }));
+        setPost({ ...fetchedPost, avatarBlob, mediaBlob });
+        setPostCounters(initialCounters);
+      } catch (err: any) {
+        console.error("Error fetching post:", err);
+        setError("خطا در بارگذاری پست");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPostAndMedia();
   }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    if (hasFetchedRef.current) return;
+    if (!post) return;
+
+    fetchComments();
+    hasFetchedRef.current = true;
+  }, [isDesktop, post?.id]);
+
+  useEffect(() => {
+    hasFetchedRef.current = false;
+  }, [post?.id]);
+
+  const handleLikeToggle = async (postId: string) => {
+    if (!likedMap) {
+      console.error("likedMap is not initialized!");
+      return;
+    }
+    const currentlyLiked = !!likedMap[postId];
+
+    try {
+      if (!currentlyLiked) {
+        const result = await postService.likePost(postId);
+
+        if (result?.success === false) return;
+
+        setLikedMap((prev) => ({ ...prev, [postId]: true }));
+        setPostCounters((prevCounters) => ({
+          ...prevCounters,
+          [postId]: {
+            ...prevCounters[postId],
+            likeCount: (prevCounters[postId]?.likeCount || 0) + 1,
+          },
+        }));
+      } else {
+        const result = await postService.unlikePost(postId);
+
+        if (result?.success === false) return;
+
+        setLikedMap((prev) => ({ ...prev, [postId]: false }));
+        setPostCounters((prevCounters) => ({
+          ...prevCounters,
+          [postId]: {
+            ...prevCounters[postId],
+            likeCount: Math.max((prevCounters[postId]?.likeCount || 0) - 1, 0),
+          },
+        }));
+      }
+    } catch (err) {
+      console.error(`Error toggling like for post ${postId}:`, err);
+    }
+  };
 
   const handleCommentFormSubmit = async (commentText: string) => {
     const commentDto: CreateCommentDto = {
       text: commentText,
     };
     try {
+      if (!post) return;
+
       const postACommentResponse = await postService.postAComment(
-        currentPost.id,
+        post.id,
         commentDto,
       );
-      setCurrentPost({
-        ...currentPost,
-        commentsCount: currentPost.commentsCount + 1,
-      });
+      setPost({ ...post, commentsCount: post.commentsCount + 1 });
       const newComment: CommentListItemDto =
         await commentService.getCommentById(postACommentResponse?.id);
       let avatarBlob: Blob | undefined;
@@ -93,8 +209,9 @@ const PostCard = ({
   const fetchComments = async () => {
     try {
       setIsCommentsLoading(true);
+      if (!post) return;
       const commentsList: CommentListItemDto[] = await postService.getComments(
-        currentPost.id,
+        post.id,
       );
       const commentsListWithUserAvatarBlobs: CommentData[] = await Promise.all(
         commentsList.map(async (cm) => {
@@ -123,115 +240,146 @@ const PostCard = ({
     setIsCommentsListOpen(true);
   };
 
-  const handleDeleteComment = async (commentId: string) => {
-    await postService.deleteMyComment(currentPost.id, commentId);
-    setComments((prev) => prev.filter((c) => c.id !== commentId));
-    setCurrentPost({
-      ...currentPost,
-      commentsCount: currentPost.commentsCount - 1,
-    });
+  const handleNavigateToUser = (userId: string) => {
+    navigate(`/user/${userId}`);
   };
 
-  const commentsModalContent = (
-    <div className="comments-list-container">
-      <CommentList
-        comments={comments}
-        isCommentsLoading={isCommentsLoading}
-        onNavigateToUser={onNavigate}
-        onDeleteComment={handleDeleteComment}
+  const handleDeleteComment = async (commentId: string) => {
+    if (!post) return;
+
+    await postService.deleteMyComment(post.id, commentId);
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+    setPost({ ...post, commentsCount: post.commentsCount - 1 });
+  };
+
+  const handleDeletePost = async () => {
+    try {
+      if (!post) return;
+
+      await postService.deletePost(post.id);
+      navigate("/profile");
+    } catch (err) {
+      console.error("Error deleting post:", err);
+    }
+  };
+
+  if (loading) return <p className="loading-text">در حال بارگذاری پست‌ها...</p>;
+  if (error) return <p className="error-text">{error}</p>;
+
+  if (!post) return <p className="empty-text">پستی برای نمایش وجود ندارد.</p>;
+
+  const postIdString = post.id;
+  const isLiked = !!likedMap?.[postIdString];
+  var commentsCountElement = (
+    <p className={styles.commentsCount} onClick={handleCommentsCountClick}>
+      {post.commentsCount.toLocaleString("fa-Ir")} عدد نظرات
+    </p>
+  );
+
+  var postMediaElement = post.mediaBlob ? (
+    <div className={styles.mediaContainer}>
+      <BlobImage
+        blob={post.mediaBlob}
+        alt="Post Media"
+        className={styles.media}
       />
-      <CommentForm
-        isPostingAComment={isPostingAComment}
-        onSubmitComment={handleCommentFormSubmit}
-        extraClassNames="modal-comment-form"
-      />
+    </div>
+  ) : (
+    <div className={styles.mediaContainer}>
+      <p className={styles.media}>رسانه موجود نیست.</p>
     </div>
   );
 
-  if (error) return <p className="error-text">{error}</p>;
+  const deleteOption: ContextMenuItemData = {
+    icon: <MdDeleteOutline />,
+    label: "حذف",
+    forColor: "red",
+    action: () => handleDeletePost(),
+  };
 
-  if (!currentPost)
-    return <p className="empty-text">پستی برای نمایش وجود ندارد.</p>;
-
-  let commentsCountElement = null;
-  if (currentPost.commentsCount)
-    commentsCountElement = (
-      <p
-        className="comments-count comments-count-currentPost-page"
-        onClick={handleCommentsCountClick}
-      >
-        {currentPost.commentsCount} عدد نظرات
-      </p>
-    );
+  const postHeaderOptions: ContextMenuItemData[] = post.isYours
+    ? [deleteOption]
+    : [];
 
   return (
-    <div
-      key={currentPost.id}
-      ref={setPostRef(currentPost.id)}
-      data-id={currentPost.id}
-      className="post-card"
-    >
+    <>
       <CommentsModal
         comments={comments}
-        isLoading={false}
+        isLoading={loading}
         isPosting={isPostingAComment}
         isOpen={isCommentsListModalOpen}
         setIsCommentsListOpen={setIsCommentsListOpen}
         handleCommentFormSubmit={handleCommentFormSubmit}
         handleDeleteComment={handleDeleteComment}
-        handleNavigateToUser={onNavigate}
+        handleNavigateToUser={handleNavigateToUser}
       />
-      <div className="post-card-user-info-container">
-        {currentPost.avatarBlob ? (
-          <BlobAvatar
-            blob={currentPost.avatarBlob}
-            isBigAvatar={false}
-            handleClick={() => onNavigate(currentPost.postOwnerId)}
-          />
+
+      <div className={styles.postCard}>
+        {isDesktop ? (
+          <>
+            <div className={styles.postContent}>
+              <PostHeader
+                avatarBlob={post.avatarBlob}
+                username={post.postOwnerUserName}
+                onUserInfoClick={() => handleNavigateToUser(post.postOwnerId)}
+                options={postHeaderOptions}
+                extraClassNames={styles.postHeader}
+              />
+
+              <CommentList
+                comments={comments}
+                isCommentsLoading={isCommentsLoading}
+                onNavigateToUser={handleNavigateToUser}
+                onDeleteComment={handleDeleteComment}
+              >
+                <PostCaption
+                  caption={post.caption}
+                  extraClassNames={styles.desktopCaption}
+                />
+              </CommentList>
+
+              <div className={styles.interactionsRow}>
+                <LikeMeta
+                  isLiked={isLiked}
+                  likeCount={postCounters[post.id].likeCount}
+                  handleLikeToggle={() => handleLikeToggle(postIdString)}
+                />
+                <ViewMeta viewCount={postCounters[post.id].viewCount} />
+              </div>
+
+              <CommentForm
+                isPostingAComment={isPostingAComment}
+                onSubmitComment={handleCommentFormSubmit}
+              />
+            </div>
+
+            {postMediaElement}
+          </>
         ) : (
-          <div
-            className="user-avatar"
-            onClick={() => onNavigate(currentPost.postOwnerId)}
-          />
+          <>
+            <PostHeader
+              avatarBlob={post.avatarBlob}
+              username={post.postOwnerUserName}
+              onUserInfoClick={() => handleNavigateToUser(post.postOwnerId)}
+              options={postHeaderOptions}
+            />
+            {postMediaElement}
+            <div className={styles.postContent}>
+              <div className={styles.interactionRow}>
+                <LikeMeta
+                  isLiked={isLiked}
+                  likeCount={postCounters[post.id].likeCount}
+                  handleLikeToggle={() => handleLikeToggle(postIdString)}
+                />
+              </div>
+              <PostCaption caption={post.caption} />
+              {commentsCountElement}
+              <ViewMeta viewCount={postCounters[post.id].viewCount} />
+            </div>
+          </>
         )}
-        <span
-          className="username"
-          onClick={() => onNavigate(currentPost.postOwnerId)}
-        >
-          {currentPost.postOwnerUserName || "کاربر ناشناس"}
-        </span>
       </div>
-
-      {currentPost.mediaBlob ? (
-        <BlobImage
-          blob={currentPost.mediaBlob}
-          alt="Post Media"
-          className="post-media"
-        />
-      ) : (
-        <p className="post-meta">رسانه موجود نیست.</p>
-      )}
-
-      <h4 className={`post-caption ${currentPost.caption || "no-caption"}`}>
-        {currentPost.caption || "بدون عنوان"}
-      </h4>
-      {commentsCountElement}
-      <div className="post-meta-container">
-        <p className="post-meta">تعداد بازدید: {counters.viewCount ?? 0}</p>
-        <p className="post-meta">تعداد لایک: {counters.likeCount ?? 0}</p>
-      </div>
-
-      <LikeButton
-        isLiked={isLiked}
-        onClick={() => onLikeToggle(currentPost.id)}
-      />
-
-      <CommentForm
-        isPostingAComment={isPostingAComment}
-        onSubmitComment={handleCommentFormSubmit}
-        extraClassNames={`post-card-comment-form`}
-      />
-    </div>
+    </>
   );
 };
 

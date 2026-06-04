@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 16px 8px;
   grid-area: "postHeader";
   height: fit-content;
 }
@@ -45,4 +45,19 @@
     grid-area: "postHeader";
     height: fit-content;
   }
+}
+
+.menu {
+  position: absolute;
+  width: 120px;
+  min-height: 0;
+  height: fit-content;
+  max-height: 150px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  background-color: white;
+  overflow-y: auto;
+  scrollbar-width: none;
 }

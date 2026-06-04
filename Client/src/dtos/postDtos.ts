@@ -22,7 +22,7 @@ export interface PostDto {
 
 export interface PostListItemDto {
   id: string;
-  mediaId: string;
+  viewCount: number;
 }
 
 export interface CreatePostResponseDto {

@@ -1,0 +1,82 @@
+.postCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 80vh;
+  overflow-x: hidden;
+}
+
+.postContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.commentsSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.commentsCount {
+  color: #888;
+  font-size: small;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.mediaContainer {
+  width: 100%;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.media {
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.interactionsRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 8px;
+  }
+
+@media (min-width: 769px) {
+  .postCard {
+    flex-direction: row;
+    width: 80%;
+  }
+
+  .postContent {
+    min-height: 0;
+    overflow: hidden;
+    flex: 1 1 400px;
+    padding: 0;
+  }
+
+  .mediaContainer {
+    flex: 0 2 auto;
+  }
+
+  .desktopCaption {
+    padding-top: 24px !important;
+    padding-bottom: 8px;
+    margin: -16px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .postHeader {
+    box-shadow: 0 4px 30px 0px rgba(0, 0, 0, 0.1);
+  }
+}

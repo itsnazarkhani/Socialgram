@@ -191,12 +191,12 @@ namespace Socialgram.Controllers
                 .Select(p => new
                 {
                     p.Id,
-                    MediaId = p.MediaFile!.Id,
+                    ViewCount = p.PostViews.Count,
                     p.UserId
                 })
                 .Where(p => p.UserId == id)
                 .AsEnumerable()
-                .Select(p => new PostListItemDto(p.Id, p.MediaId))
+                .Select(p => new PostListItemDto(p.Id, p.ViewCount))
                 .ToList();
 
             return Ok(posts);

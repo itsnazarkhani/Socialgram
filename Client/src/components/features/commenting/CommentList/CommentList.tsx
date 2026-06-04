@@ -9,6 +9,7 @@ type CommentListProps = {
   extraClassNames?: string;
   onNavigateToUser: (userId: string) => void;
   onDeleteComment: (commentId: string) => void;
+  children?: React.ReactNode;
 };
 
 const CommentList: React.FC<CommentListProps> = ({
@@ -17,9 +18,11 @@ const CommentList: React.FC<CommentListProps> = ({
   extraClassNames,
   onNavigateToUser,
   onDeleteComment,
+  children,
 }) => {
   return (
     <div className={`${styles.list} ${extraClassNames}`}>
+      {children}
       {isCommentsLoading ? (
         <p className={styles.messageInTheMiddle}>نظرات درحال بارگیری است...</p>
       ) : comments.length === 0 ? (

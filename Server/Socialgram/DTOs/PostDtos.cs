@@ -18,5 +18,5 @@ namespace Socialgram.DTOs
     public record class UpdatePostCaptionDto(string? Caption);
 
     public record class PostListItemDto(Guid Id,
-                                        Guid MediaId);
+                                        int ViewCount);
 }

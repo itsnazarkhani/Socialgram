@@ -5,7 +5,7 @@ namespace Socialgram.Mapping
 {
     public static class PostsMapping
     {
-        public static PostListItemDto ToListItemDto(this Post post, Guid mediaId) =>
-            new PostListItemDto(post.Id, mediaId);
+        public static PostListItemDto ToListItemDto(this Post post, int viewCount) =>
+            new PostListItemDto(post.Id, viewCount);
     }
 }

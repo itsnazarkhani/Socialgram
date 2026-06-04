@@ -1,19 +1,19 @@
 import type { ReactNode } from "react";
-import styles from "./ContextMenuItem.module.css";
+import styles from "./OverlayMenuItem.module.css";
 
-type ContextMenuItemProps = {
+type OverlayMenuItemProps = {
   icon?: ReactNode;
-  text: string;
+  label: string;
   forColor?: string;
-  onClick: () => void;
+  action: () => void;
 };
 
-const ContextMenuItem = ({
+const OverlayMenuItem = ({
   icon,
-  text,
+  label,
   forColor,
-  onClick,
-}: ContextMenuItemProps) => {
+  action: onClick,
+}: OverlayMenuItemProps) => {
   const style = {
     color: forColor,
   };
@@ -21,9 +21,9 @@ const ContextMenuItem = ({
   return (
     <div className={styles.item} style={style} onClick={onClick}>
       <span className={styles.icon}>{icon}</span>
-      <p className={styles.text}>{text}</p>
+      <p className={styles.text}>{label}</p>
     </div>
   );
 };
 
-export default ContextMenuItem;
+export default OverlayMenuItem;

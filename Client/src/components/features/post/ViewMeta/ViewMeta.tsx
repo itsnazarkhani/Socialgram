@@ -1,11 +1,11 @@
-import styles from "./PostMeta.module.css";
+import styles from "./ViewMeta.module.css";
 import { FaEye } from "react-icons/fa6";
 
-type PostMetaProps = {
+type ViewMetaProps = {
   viewCount: number;
 };
 
-const PostMeta = ({ viewCount }: PostMetaProps) => {
+const ViewMeta = ({ viewCount }: ViewMetaProps) => {
   return (
     <div className={styles.container}>
       <span>{viewCount.toLocaleString("fa-IR")}</span>
@@ -14,4 +14,4 @@ const PostMeta = ({ viewCount }: PostMetaProps) => {
   );
 };
 
-export default PostMeta;
+export default ViewMeta;
