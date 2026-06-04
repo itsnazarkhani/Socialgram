@@ -1,31 +1,32 @@
 import type { JSX } from "react";
-import "./UserListItem.css"
+import styles from "./UserListItem.module.css";
 
 type UserListItemProps = {
-    userId: string,
-    handleUserListItemClick: () => void;
-    avatar: JSX.Element;
-    userName?: string;
-    displayName?: string;
-}
+  userId: string;
+  handleUserListItemClick: () => void;
+  avatar: JSX.Element;
+  userName?: string;
+  displayName?: string;
+  extraClassNames?: string;
+};
 
 const UserListItem = ({
-    userId,
-    handleUserListItemClick,
-    avatar,
-    userName,
-    displayName
+  userId,
+  handleUserListItemClick,
+  avatar,
+  userName,
+  displayName,
+  extraClassNames,
 }: UserListItemProps) => {
-    return (
-        <div key={userId} className='user-list-item'
-            onClick={handleUserListItemClick}>
-            {avatar}
-            <div className='user-naming-detail-container'>
-                <span className="username-search-item" > {userName || "کاربر ناشناس"}</span>
-                <div className="display-name-search-item">{displayName || "بی‌نام"}</div>
-            </div>
-        </div>
-    );
-}
+  return (
+    <div key={userId} className={`${styles.item} ${extraClassNames}`} onClick={handleUserListItemClick}>
+      {avatar}
+      <div className={styles.userInfo}>
+        <span className={styles.username}> {userName || "کاربر ناشناس"}</span>
+        <div className={styles.displayName}>{displayName || "بی‌نام"}</div>
+      </div>
+    </div>
+  );
+};
 
 export default UserListItem;
