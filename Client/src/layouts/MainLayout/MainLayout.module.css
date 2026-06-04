@@ -1,0 +1,57 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+.topbar {
+  height: 55px;
+}
+
+.mainContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  min-height: 0;
+  z-index: 1000;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 769px) {
+  .mainContainer {
+    flex-direction: row-reverse;
+  }
+
+  .navbar {
+    width: fit-content;
+    min-width: 70px;
+    right: 0;
+    height: calc(100vh - 65px);
+    overflow: hidden;
+  }
+
+  .content {
+    margin-right: 70px;
+  }
+
+  .topbar {
+    height: 65px;
+  }
+}

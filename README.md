@@ -1,3 +1,3 @@
-# Demo2
+# Socialgram
 
-Some text.
+Socialgram is a instagram clone developed with ASP.NET Core & React.JS.

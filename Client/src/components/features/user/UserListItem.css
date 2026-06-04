@@ -1,0 +1,65 @@
+.user-list-item {
+    padding: 12px 18px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #f4f4f4;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.user-list-item:last-child {
+    border-bottom: none;
+    
+}
+
+.user-list-item:hover {
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transform: translateX(3px);
+}
+
+
+.user-naming-detail-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.username-search-item {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.display-name-search-item {
+    font-size: 0.85rem;
+    color: #777;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (min-width: 769px) {
+    .user-list-item {
+        padding: 15px;
+    }
+
+    .user-list-item:hover {
+        transform: translateX(5px);
+        
+    }
+
+    .username-search-item {
+        font-size: 1rem;
+    }
+
+    .display-name-search-item {
+        font-size: 0.9rem;
+    }
+}

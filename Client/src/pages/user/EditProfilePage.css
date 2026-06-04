@@ -1,0 +1,104 @@
+.edit-profile-page-container {
+    gap: 16px;
+}
+
+.edit-avatar-container {
+    width: 100%;
+    justify-content: center;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.column-flex-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+#edit-avatar-btn {
+    margin-top: 6px;
+    padding: 9px 16px;
+    background-color: #f60800;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    height: fit-content;
+    flex-shrink: 0;
+    transition: background-color .15s ease, opacity .15s ease;
+}
+
+#edit-avatar-btn:active {
+    transform: translateY(1px);
+}
+
+#edit-avatar-btn:hover:not(:disabled) {
+    background-color: #bf2600;
+}
+
+#edit-profile-form {
+    width: 70%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#edit-profile-form .text-box {
+    padding: 12px 16px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fafafa;
+    display: block;
+}
+
+#edit-profile-form .text-box:focus {
+    border-color: #a832a8;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(168, 50, 168, 0.2);
+}
+
+textarea {
+    min-height: 150px;
+    overflow-y: auto;
+    resize: none;
+    font-family: inherit;
+}
+
+#edit-profile-form button {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #0095f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    margin-top: 1rem;
+}
+
+#edit-profile-form button:hover:not(:disabled) {
+    background-color: #1877f2;
+    opacity: 0.9;
+}
+
+#edit-profile-form button:disabled {
+    background-color: #b2dffc;
+    cursor: not-allowed;
+}
+
+@media (min-width: 769px) {
+    .edit-profile-page-container {
+        height: calc(100vh - 40px);
+    }
+}

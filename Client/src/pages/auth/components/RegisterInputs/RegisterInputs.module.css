@@ -1,0 +1,23 @@
+.inputWrapper {
+  width: 100%;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.inputWrapper input {
+  padding-right: 40px;
+}
+
+.validMsg,
+.invalidMsg {
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.validMsg {
+  color: #2ea316;
+}
+
+.invalidMsg {
+  color: #ed4956;
+}

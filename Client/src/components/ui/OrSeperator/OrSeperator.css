@@ -1,0 +1,27 @@
+.or-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #8e8e8e;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.or-separator::before,
+.or-separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.or-separator:not(:empty)::before {
+  margin-right: 0.5em;
+}
+
+.or-separator:not(:empty)::after {
+  margin-left: 0.5em;
+}
+
+.auth-switch-component {
+  margin-top: 2rem;
+}

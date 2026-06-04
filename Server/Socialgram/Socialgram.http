@@ -1,0 +1,6 @@
+@Socialgram_HostAddress = http://localhost:5225
+
+GET {{Socialgram_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

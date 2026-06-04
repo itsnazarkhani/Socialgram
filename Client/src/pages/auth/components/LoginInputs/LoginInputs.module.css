@@ -1,0 +1,9 @@
+.inputWrapper {
+  width: 100%;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.inputWrapper input {
+  padding-right: 40px;
+}
