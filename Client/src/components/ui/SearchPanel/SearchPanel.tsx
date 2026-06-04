@@ -112,7 +112,7 @@ const SearchPanel = ({ togglePanel, setTogglePanel }: SearchPanelProps) => {
             userName={user.userName}
             displayName={user.displayName}
             avatar={avatar}
-            extraClassNames={styles.radius}
+            extraClassNames={styles.radiusBorder}
             handleUserListItemClick={() => handleUserListItemClick(user.id)}
           />
         );
