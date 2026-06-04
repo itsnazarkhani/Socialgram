@@ -1,5 +1,6 @@
-import { FcLike, FcLikePlaceholder } from "react-icons/fc";
+import { FcLike } from "react-icons/fc";
 import styles from "./LikeButton.module.css";
+import { FaRegHeart } from "react-icons/fa6";
 
 type LikeButtonProps = {
   isLiked: boolean;
@@ -15,7 +16,7 @@ const LikeButton = ({ isLiked, extraClassNames, onClick }: LikeButtonProps) => {
       onClick={onClick}
       aria-pressed={isLiked}
     >
-      {isLiked ? <FcLike /> : <FcLikePlaceholder />}
+      {isLiked ? <FcLike /> : <FaRegHeart />}
     </button>
   );
 };
