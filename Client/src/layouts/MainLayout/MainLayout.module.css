@@ -33,6 +33,12 @@
   flex-direction: column;
 }
 
+@media (max-width: 768px) {
+  .content {
+    padding-bottom: 64px;
+  }
+}
+
 @media (min-width: 769px) {
   .mainContainer {
     flex-direction: row-reverse;
