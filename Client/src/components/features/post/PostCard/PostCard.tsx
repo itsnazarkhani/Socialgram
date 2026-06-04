@@ -1,32 +1,31 @@
 import type {
   CreateCommentDto,
   CommentListItemDto,
-} from "../../../dtos/commentDtos";
+} from "../../../../dtos/commentDtos";
 import type {
   PostWithDisplayData,
   PostCounters,
-} from "../../../interfaces/postInterfaces";
-import { commentService } from "../../../services/commentService";
-import { postService } from "../../../services/postService";
-import { userService } from "../../../services/userService";
-import BlobAvatar from "../../ui/Image/BlobAvatar";
-import BlobImage from "../../ui/Image/BlobImage";
-import Modal from "../../ui/Modal/Modal";
-import type { Comment } from "../../../interfaces/commentInterfaces";
-import CommentForm from "../commenting/CommentForm";
-import CommentList from "../commenting/CommentList";
+} from "../../../../interfaces/postInterfaces";
+import { commentService } from "../../../../services/commentService";
+import { postService } from "../../../../services/postService";
+import { userService } from "../../../../services/userService";
+import BlobAvatar from "../../../ui/Image/BlobAvatar";
+import BlobImage from "../../../ui/Image/BlobImage";
+import Modal from "../../../ui/Modal/Modal";
+import type { CommentData } from "../../../../interfaces/commentInterfaces";
+import CommentForm from "../../commenting/CommentForm/CommentForm";
 import "./PostCard.css";
 import { useEffect, useState } from "react";
-import LikeButton from "../../ui/Buttons/LikeButton/LikeButton";
+import LikeButton from "../../../ui/Buttons/LikeButton/LikeButton";
+import CommentList from "../../commenting/CommentList/CommentList";
+import CommentsModal from "../../commenting/CommentsModal/CommentsModal";
 
 type PostCardProps = {
   post: PostWithDisplayData;
-  postCounters?:
-    | PostCounters
-    | {
-        viewCount: 0;
-        likeCount: 0;
-      };
+  postCounters: {
+    viewCount: 0;
+    likeCount: 0;
+  };
   isLiked: boolean;
   onNavigate: (userId: string) => void;
   onLikeToggle: (postId: string) => void;
@@ -41,12 +40,12 @@ const PostCard = ({
   onLikeToggle,
   setPostRef,
 }: PostCardProps) => {
-  const [currentPost, setCurrentPost] = useState<PostWithDisplayData>(null);
+  const [currentPost, setCurrentPost] = useState<PostWithDisplayData>();
   const counters = postCounters[post.id] || { viewCount: 0, likeCount: 0 };
 
   const [error, setError] = useState<string | null>(null);
 
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<CommentData[]>([]);
   const [isCommentsLoading, setIsCommentsLoading] = useState<boolean>(false);
   const [isCommentsListModalOpen, setIsCommentsListOpen] =
     useState<boolean>(false);
@@ -79,7 +78,7 @@ const PostCard = ({
         if (err?.response?.status === 404) avatarBlob = undefined;
         else throw err;
       }
-      const newCommentWithAvatar: Comment = {
+      const newCommentWithAvatar: CommentData = {
         ...newComment,
         avatarBlob,
       };
@@ -97,7 +96,7 @@ const PostCard = ({
       const commentsList: CommentListItemDto[] = await postService.getComments(
         currentPost.id,
       );
-      const commentsListWithUserAvatarBlobs: Comment[] = await Promise.all(
+      const commentsListWithUserAvatarBlobs: CommentData[] = await Promise.all(
         commentsList.map(async (cm) => {
           let avatarBlob: Blob | undefined;
           try {
@@ -172,25 +171,16 @@ const PostCard = ({
       data-id={currentPost.id}
       className="post-card"
     >
-      <Modal
+      <CommentsModal
+        comments={comments}
+        isLoading={false}
+        isPosting={isPostingAComment}
         isOpen={isCommentsListModalOpen}
-        onClose={() => setIsCommentsListOpen(false)}
-        title="نظرات"
-      >
-        {isCommentsListModalOpen && !comments.length && !isCommentsLoading && (
-          <p>خطا در بارگیری نظرات یا هیچ نظری وجود ندارد.</p>
-        )}
-        {isCommentsListModalOpen &&
-          comments.length === 0 &&
-          !isCommentsLoading && (
-            <p className="no-comments">هیچ نظری وجود ندارد.</p>
-          )}
-        {isCommentsLoading ? (
-          <p className="comments-loading">نظرات درحال بارگیری است...</p>
-        ) : (
-          commentsModalContent
-        )}
-      </Modal>
+        setIsCommentsListOpen={setIsCommentsListOpen}
+        handleCommentFormSubmit={handleCommentFormSubmit}
+        handleDeleteComment={handleDeleteComment}
+        handleNavigateToUser={onNavigate}
+      />
       <div className="post-card-user-info-container">
         {currentPost.avatarBlob ? (
           <BlobAvatar

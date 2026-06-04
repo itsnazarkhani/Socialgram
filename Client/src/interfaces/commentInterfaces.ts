@@ -1,5 +1,5 @@
 import type { CommentListItemDto } from "../dtos/commentDtos";
 
-export interface Comment extends CommentListItemDto {
+export interface CommentData extends CommentListItemDto {
     avatarBlob?: Blob | undefined;
 }

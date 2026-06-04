@@ -1,0 +1,17 @@
+.list {
+  flex: 1;
+  min-height: 0;
+
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 8px 16px;
+}
+
+.messageInTheMiddle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}

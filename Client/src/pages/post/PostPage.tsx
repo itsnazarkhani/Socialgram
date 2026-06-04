@@ -8,23 +8,24 @@ import type { PostDto } from "../../dtos/postDtos";
 import { postService } from "../../services/postService";
 import { userService } from "../../services/userService";
 import BlobImage from "../../components/ui/Image/BlobImage";
-import "./PostPage.css";
+import styles from "./PostPage.module.css";
 import type {
   CommentListItemDto,
   CreateCommentDto,
 } from "../../dtos/commentDtos";
 import { commentService } from "../../services/commentService";
-import type { Comment } from "../../interfaces/commentInterfaces";
+import type { CommentData } from "../../interfaces/commentInterfaces";
 import useIsDesktop from "../../hooks/useIsDesktop";
 import PageContainer from "../../components/layout/PageContainer/PageContainer";
-import CommentForm from "../../components/features/commenting/CommentForm";
-import CommentList from "../../components/features/commenting/CommentList";
-import BackButtonCard from "../../components/ui/BackButtonCard/BackButtonCard";
-import CommentsModal from "./components/CommentsModal/CommentsModal";
+import CommentForm from "../../components/features/commenting/CommentForm/CommentForm";
+import CommentsModal from "../../components/features/commenting/CommentsModal/CommentsModal";
 import LikeButton from "../../components/ui/Buttons/LikeButton/LikeButton";
 import PostHeader from "../../components/ui/PostHeader/PostHeader";
 import type { ContextMenuItemData } from "../../interfaces/menuInterfaces";
 import { MdDeleteOutline } from "react-icons/md";
+import PostMeta from "../../components/features/post/PostMeta/PostMeta";
+import PostCaption from "../../components/features/post/PostCaption/PostCaption";
+import CommentList from "../../components/features/commenting/CommentList/CommentList";
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const PostPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<CommentData[]>([]);
   const [isCommentsLoading, setIsCommentsLoading] = useState<boolean>(false);
   const [isCommentsListModalOpen, setIsCommentsListOpen] =
     useState<boolean>(false);
@@ -187,7 +188,7 @@ const PostPage = () => {
         if (err?.response?.status === 404) avatarBlob = undefined;
         else throw err;
       }
-      const newCommentWithAvatar: Comment = {
+      const newCommentWithAvatar: CommentData = {
         ...newComment,
         avatarBlob,
       };
@@ -206,7 +207,7 @@ const PostPage = () => {
       const commentsList: CommentListItemDto[] = await postService.getComments(
         post.id,
       );
-      const commentsListWithUserAvatarBlobs: Comment[] = await Promise.all(
+      const commentsListWithUserAvatarBlobs: CommentData[] = await Promise.all(
         commentsList.map(async (cm) => {
           let avatarBlob: Blob | undefined;
           try {
@@ -262,7 +263,6 @@ const PostPage = () => {
   if (!post) return <p className="empty-text">پستی برای نمایش وجود ندارد.</p>;
 
   const postIdString = post.id;
-  const counters = postCounters[postIdString] || { viewCount: 0, likeCount: 0 };
   const isLiked = !!likedMap?.[postIdString];
   var commentsCountElement = null;
   if (post.commentsCount)
@@ -285,23 +285,6 @@ const PostPage = () => {
     <p className="post-meta">رسانه موجود نیست.</p>
   );
 
-  var postCaptionElement = (
-    <h4 className={`post-caption ${post.caption || "no-caption"}`}>
-      {post.caption || "بدون عنوان"}
-    </h4>
-  );
-
-  var postMetaElement = (
-    <div className="post-meta-container">
-      <p className="post-meta">تعداد بازدید: {counters.viewCount}</p>
-      <p className="post-meta">تعداد لایک: {counters.likeCount}</p>
-    </div>
-  );
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
   const deleteOption: ContextMenuItemData = {
     icon: <MdDeleteOutline />,
     text: "حذف",
@@ -314,8 +297,7 @@ const PostPage = () => {
     : [];
 
   return (
-    <PageContainer extraClassNames="post-page-container">
-      <BackButtonCard handleGoBack={handleGoBack} />
+    <PageContainer>
       <CommentsModal
         comments={comments}
         isLoading={loading}
@@ -327,52 +309,59 @@ const PostPage = () => {
         handleNavigateToUser={handleNavigateToUser}
       />
 
-      <div className="post-page-card-wrapper">
-        <div className="post-page-card">
-          <PostHeader
-            avatarBlob={post.avatarBlob}
-            username={post.postOwnerUserName}
-            onUserInfoClick={() => handleNavigateToUser(post.postOwnerId)}
-            options={postHeaderOptions}
-          />
-          <div className="post-media-container">{postMediaElement}</div>
-          <div className="post-details-container">
-            {postCaptionElement}
+      <div className={styles.page}>
+        <div className={styles.postCard}>
+          {isDesktop ? (
+            <>
+              <PostHeader
+                avatarBlob={post.avatarBlob}
+                username={post.postOwnerUserName}
+                onUserInfoClick={() => handleNavigateToUser(post.postOwnerId)}
+                options={postHeaderOptions}
+              />
 
-            <div className="post-actions-meta">
-              {commentsCountElement}
+              <PostCaption caption={post.caption} />
+
+              <CommentList
+                comments={comments}
+                isCommentsLoading={isCommentsLoading}
+                onNavigateToUser={handleNavigateToUser}
+                onDeleteComment={handleDeleteComment}
+              />
+
               <LikeButton
                 isLiked={isLiked}
                 onClick={() => handleLikeToggle(postIdString)}
                 extraClassNames={""}
               />
-              {postMetaElement}
-            </div>
+              <PostMeta viewCount={postCounters[post.id].viewCount} />
 
-            {isDesktop && (
-              <div className="comments-list-container-major">
-                <CommentList
-                  comments={comments}
-                  isCommentsLoading={isCommentsLoading}
-                  onNavigateToUser={handleNavigateToUser}
-                  onDeleteComment={handleDeleteComment}
-                  extraClassNames="major-comments-list"
+              <CommentForm
+                isPostingAComment={isPostingAComment}
+                onSubmitComment={handleCommentFormSubmit}
+              />
+            </>
+          ) : (
+            <>
+              <PostHeader
+                avatarBlob={post.avatarBlob}
+                username={post.postOwnerUserName}
+                onUserInfoClick={() => handleNavigateToUser(post.postOwnerId)}
+                options={postHeaderOptions}
+              />
+              <div className={styles.media}>{postMediaElement}</div>
+              <div className={styles.postContent}>
+                <LikeButton
+                  isLiked={isLiked}
+                  onClick={() => handleLikeToggle(postIdString)}
+                  extraClassNames={""}
                 />
-
-                <CommentForm
-                  isPostingAComment={isPostingAComment}
-                  onSubmitComment={handleCommentFormSubmit}
-                  extraClassNames="main-comment-form-major"
-                />
+                <PostCaption caption={post.caption} />
+                {commentsCountElement}
+                <PostMeta viewCount={postCounters[post.id].viewCount} />
               </div>
-            )}
-
-            <CommentForm
-              isPostingAComment={isPostingAComment}
-              onSubmitComment={handleCommentFormSubmit}
-              extraClassNames={`main-comment-form ${isCommentsListModalOpen ? "delete-this" : null}`}
-            />
-          </div>
+            </>
+          )}
         </div>
       </div>
     </PageContainer>

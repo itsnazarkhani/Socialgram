@@ -1,11 +1,11 @@
 .header {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px;
   grid-area: "postHeader";
   height: fit-content;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .infoContainer {
@@ -44,6 +44,5 @@
   .header {
     grid-area: "postHeader";
     height: fit-content;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 }

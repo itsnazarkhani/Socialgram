@@ -9,7 +9,7 @@ import type {
   PostCounters,
 } from "../../interfaces/postInterfaces";
 import PageContainer from "../../components/layout/PageContainer/PageContainer";
-import PostCard from "../../components/features/post/PostCard";
+import PostCard from "../../components/features/post/PostCard/PostCard";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -190,7 +190,7 @@ export default function HomePage() {
           <PostCard
             key={post.id}
             post={post}
-            postCounters={postCounters}
+            postCounters={postCounters[post.id]}
             isLiked={likedMap[post.id]}
             onLikeToggle={handleLikeToggle}
             onNavigate={handleUserProfileClick}

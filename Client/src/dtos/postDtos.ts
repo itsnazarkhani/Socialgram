@@ -8,7 +8,7 @@ export interface UpdatePostCaptionDto {
 
 export interface PostDto {
   id: string;
-  caption?: string | null;
+  caption?: string;
   viewCount: number;
   likeCount: number;
   commentsCount: number;
