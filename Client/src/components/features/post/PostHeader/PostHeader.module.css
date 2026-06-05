@@ -61,3 +61,10 @@
   overflow-y: auto;
   scrollbar-width: none;
 }
+
+.menu * {
+  direction: rtl;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif !important;
+}

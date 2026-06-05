@@ -23,6 +23,7 @@ const LoginInputs = ({
           id="username"
           value={userNameTxt}
           onChange={(e) => setUserName(e.target.value)}
+          placeholder=" "
         />
         <label htmlFor="username">نام کاربری</label>
       </FloatLabel>
@@ -34,6 +35,7 @@ const LoginInputs = ({
           value={passwordTxt}
           type="password"
           onChange={(e) => setPassword(e.target.value)}
+          placeholder=" "
         />
         <label htmlFor="password">رمز عبور</label>
       </FloatLabel>

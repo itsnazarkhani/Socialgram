@@ -2,9 +2,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  padding: 8px 16px 0 16px;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+}
+
+.pageContainer * {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif !important;
+}
+
+.withPadding {
+  padding: 8px 16px 0 16px;
 }

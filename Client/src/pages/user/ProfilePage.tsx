@@ -16,6 +16,8 @@ import PageContainer from "../../components/layout/PageContainer/PageContainer";
 import PostsGrid from "../../components/features/post/PostsGrid";
 import UsersList from "../../components/features/user/UsersList";
 import UserStats from "../../components/features/user/UserStats";
+import { FaUserEdit } from "react-icons/fa";
+import { MdOutlinePostAdd } from "react-icons/md";
 
 function ProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -200,11 +202,12 @@ function ProfilePage() {
   if (!userProfile) return null;
 
   return (
-    <PageContainer>
+    <PageContainer withPadding={false}>
       {isFollowersModalOpen && (
         <Modal
           title="لیست دنبال‌کنندگان"
           isOpen={isFollowersModalOpen}
+          setIsOpen={setIsFollowersModalOpen}
           onClose={() => setIsFollowersModalOpen(false)}
         >
           {followersList.length > 0 ? (
@@ -218,6 +221,7 @@ function ProfilePage() {
         <Modal
           title="لیست دنبال‌شوندگان"
           isOpen={isFollowingsModalOpen}
+          setIsOpen={setIsFollowingsModalOpen}
           onClose={() => setIsFollowingsModalOpen(false)}
         >
           {followingsList.length > 0 ? (
@@ -228,10 +232,7 @@ function ProfilePage() {
         </Modal>
       )}
       <header className="user-info-container">
-        <BlobAvatar
-          blob={userProfile.avatarBlob}
-          isBigAvatar={true}
-        />
+        <BlobAvatar blob={userProfile.avatarBlob} isBigAvatar={true} />
 
         <div className="user-info-text">
           <div className="username-big">
@@ -254,6 +255,7 @@ function ProfilePage() {
             onClick={handleEditProfileBtn}
           >
             ویرایش
+            <FaUserEdit size={20} />
           </button>
           <button
             type="button"
@@ -261,6 +263,7 @@ function ProfilePage() {
             onClick={() => navigate("/post/new")}
           >
             پست جدید
+            <MdOutlinePostAdd size={20} />
           </button>
         </div>
       </header>

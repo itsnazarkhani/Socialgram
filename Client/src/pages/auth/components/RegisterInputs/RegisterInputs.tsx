@@ -1,7 +1,6 @@
 import { FloatLabel } from "primereact/floatlabel";
 import styles from "./RegisterInputs.module.css";
 import { InputText } from "primereact/inputtext";
-import { Message } from "primereact/message";
 
 type RegisterInputsProps = {
   userNameTxt: string;
@@ -33,6 +32,7 @@ const RegisterInputs = ({
             id="username"
             value={userNameTxt}
             autoComplete="username"
+            placeholder=" "
             onChange={(e) => {
               setUserName(e.target.value);
               setError("");
@@ -43,19 +43,13 @@ const RegisterInputs = ({
           {userNameTxt.trim() !== "" && (
             <div className={styles.fieldHint}>
               {isCheckingUsername ? (
-                <Message severity="info" text="در حال بررسی نام کاربری..." />
+                <p>در حال بررسی نام کاربری...</p>
               ) : isUserNameAvailable === true ? (
-                <Message
-                  className={styles.validMsg}
-                  severity="success"
-                  text="نام کاربری آزاد است."
-                />
+                <p className={styles.validMsg}>نام کاربری آزاد است.</p>
               ) : isUserNameAvailable === false ? (
-                <Message
-                  className={styles.invalidMsg}
-                  severity="error"
-                  text="این نام کاربری قبلاً انتخاب شده است."
-                />
+                <p className={styles.invalidMsg}>
+                  این نام کاربری قبلاً انتخاب شده است.
+                </p>
               ) : null}
             </div>
           )}
@@ -69,6 +63,7 @@ const RegisterInputs = ({
           value={passwordTxt}
           type="password"
           autoComplete="new-password"
+          placeholder=" "
           onChange={(e) => {
             setPassword(e.target.value);
             setError("");

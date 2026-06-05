@@ -16,6 +16,7 @@ import PageContainer from "../../components/layout/PageContainer/PageContainer";
 import PostsGrid from "../../components/features/post/PostsGrid";
 import UsersList from "../../components/features/user/UsersList";
 import UserStats from "../../components/features/user/UserStats";
+import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
 
 const UserPage: React.FC = () => {
   const { id }: { id?: string } = useParams();
@@ -136,6 +137,7 @@ const UserPage: React.FC = () => {
 
   const fetchFollowersList = async () => {
     try {
+      if (!id) return;
       const followersListData: UsersListItemDto[] =
         await userService.getFollowers(id);
       const followersWithAvatarBlob: UsersListWithAvatarBlob[] =
@@ -164,6 +166,7 @@ const UserPage: React.FC = () => {
 
   const fetchFollowingsList = async () => {
     try {
+      if (!id) return;
       const followingsListData: UsersListItemDto[] =
         await userService.getFollowings(id);
       const followingsWithAvatarBlob: UsersListWithAvatarBlob[] =
@@ -224,11 +227,12 @@ const UserPage: React.FC = () => {
   if (!userProfile) return null;
 
   return (
-    <PageContainer>
+    <PageContainer withPadding={false}>
       {isFollowersModalOpen && (
         <Modal
           title="لیست دنبال‌کنندگان"
           isOpen={isFollowersModalOpen}
+          setIsOpen={setIsFollowersModalOpen}
           onClose={() => setIsFollowersModalOpen(false)}
         >
           {followersList.length > 0 ? (
@@ -242,6 +246,7 @@ const UserPage: React.FC = () => {
         <Modal
           title="لیست دنبال‌شوندگان"
           isOpen={isFollowingsModalOpen}
+          setIsOpen={setIsFollowingsModalOpen}
           onClose={() => setIsFollowingsModalOpen(false)}
         >
           {followingsList.length > 0 ? (
@@ -252,15 +257,7 @@ const UserPage: React.FC = () => {
         </Modal>
       )}
       <header className="user-info-container">
-        {userProfile.avatarBlob ? (
-          <BlobAvatar
-            blob={userProfile.avatarBlob}
-            isBigAvatar={true}
-            handleClick={{}}
-          />
-        ) : (
-          <div className="user-big-avatar" />
-        )}
+        <BlobAvatar blob={userProfile.avatarBlob} isBigAvatar={true} />
 
         <div className="user-info-text">
           <div className="username-big">
@@ -285,11 +282,13 @@ const UserPage: React.FC = () => {
             disabled={followLoading}
             onClick={handleFollowToggle}
           >
-            {followLoading
-              ? "..."
-              : userProfile.isFollowing
-                ? "Following"
-                : "Follow"}
+            {followLoading ? (
+              "..."
+            ) : userProfile.isFollowing ? (
+              <>لغو دنبال‌کردن {<SlUserUnfollow size={20} />}</>
+            ) : (
+              <>دنبال‌کردن {<SlUserFollow size={20} />}</>
+            )}
           </button>
         )}
       </header>

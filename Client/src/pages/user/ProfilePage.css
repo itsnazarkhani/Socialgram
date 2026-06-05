@@ -1,3 +1,22 @@
+.user-info-container  * {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif !important;
+}
+
+@media (max-width: 768px) {
+    .user-info-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .profile-actions {
+        width: 100%;
+        margin: 0 !important;
+    }
+}
+
 @media (min-width: 769px) {
     .user-info-container {
         justify-content: flex-start;
@@ -54,7 +73,6 @@
 
 .profile-actions {
     display: flex;
-    flex-direction: column;
     gap: 12px;
     margin-top: 16px;
     flex-wrap: wrap;
@@ -154,6 +172,8 @@
 .follow-btn,
 .new-post-btn,
 .edit-profile-btn {
+    display: flex;
+    gap: 4px;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;

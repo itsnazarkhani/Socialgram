@@ -5,13 +5,16 @@ import type { CreatePostDto } from "../../dtos/postDtos";
 import { postService } from "../../services/postService";
 import BlobImage from "../../components/ui/Image/BlobImage";
 import PageContainer from "../../components/layout/PageContainer/PageContainer";
+import { RiImageAddFill } from "react-icons/ri";
+import { UseToast } from "../../context/ToastContext";
 
 const NewPostPage = () => {
   const [error, setError] = useState<string | null>(null);
+  const toast = UseToast();
 
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File>(null);
+  const [file, setFile] = useState<File>();
   const [postImage, setPostImage] = useState<Blob | undefined>();
 
   const [caption, setCaption] = useState<string>("");
@@ -45,7 +48,7 @@ const NewPostPage = () => {
       };
       reader.readAsArrayBuffer(selectedFile);
     } else {
-      setFile(null);
+      setFile(undefined);
       setPostImage(undefined);
     }
   };
@@ -54,7 +57,12 @@ const NewPostPage = () => {
     e.preventDefault();
 
     if (!file) {
-      alert("لطفاً یک عکس برای پست انتخاب کنید.");
+      toast.current?.show({
+        severity: "warn",
+        summary: "هشدار",
+        detail: "لطفاً یک عکس برای پست انتخاب کنید.",
+        life: 3000,
+      });
       return;
     }
 
@@ -68,11 +76,21 @@ const NewPostPage = () => {
 
       await postService.createPost(file, createPostDto);
 
-      alert("پست با موفقیت ایجاد شد!");
+      toast.current?.show({
+        severity: "success",
+        summary: "موفق",
+        detail: "پست با موفقیت ایجاد شد.",
+        life: 3000,
+      });
+
       navigate("/profile");
     } catch (err: any) {
-      console.error("Error creating new post:", err);
-      setError(err?.response?.data?.message || "خطا در ایجاد پست");
+      toast.current?.show({
+        severity: "error",
+        summary: "خطا",
+        detail: err?.response?.data?.message || "خطا در ایجاد پست",
+        life: 5000,
+      });
     } finally {
       setCreatePostLoading(false);
     }
@@ -98,7 +116,7 @@ const NewPostPage = () => {
             id="edit-avatar-btn"
             onClick={handleChooseFileClick}
           >
-            انتخاب عکس
+            انتخاب عکس <RiImageAddFill size={20} />
           </button>
           <input
             type="file"

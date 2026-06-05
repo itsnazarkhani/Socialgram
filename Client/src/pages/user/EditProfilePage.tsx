@@ -5,12 +5,16 @@ import BlobAvatar from "../../components/ui/Image/BlobAvatar";
 import "./EditProfilePage.css";
 import type { UserWithAvatarBlob } from "../../interfaces/userInterfaces";
 import PageContainer from "../../components/layout/PageContainer/PageContainer";
+import { GrUpdate } from "react-icons/gr";
+import { UseToast } from "../../context/ToastContext";
 
 const EditProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [updateProfileLoading, setUpdateProfileLoading] = useState(false);
   const [updateAvatarLoading, setUpdateAvatarLoading] = useState(false);
+
+  const toast = UseToast();
 
   const [userProfile, setUserProfile] = useState<UserWithAvatarBlob | null>(
     null,
@@ -80,9 +84,19 @@ const EditProfilePage: React.FC = () => {
         await userService.updateAvatar(file);
 
         setUserProfile((prev) => (prev ? { ...prev, avatarBlob: file } : null));
+        toast.current?.show({
+          severity: "success",
+          summary: "موفق",
+          detail: "عکس پروفایل با موفقیت بروزرسانی شد.",
+          life: 3000,
+        });
       } catch (err: any) {
-        console.error("Error uploading avatar:", err);
-        setError(err?.response?.data?.message || "خطا در آپلود آواتار");
+        toast.current?.show({
+          severity: "error",
+          summary: "خطا",
+          detail: err?.response?.data?.message || "خطا در آپلود آواتار",
+          life: 5000,
+        });
       } finally {
         setUpdateAvatarLoading(false);
         if (event.target) {
@@ -116,11 +130,20 @@ const EditProfilePage: React.FC = () => {
           : null,
       );
 
-      alert("پروفایل با موفقیت بروزرسانی شد!");
+      toast.current?.show({
+        severity: "success",
+        summary: "موفق",
+        detail: "پروفایل با موفقیت بروزرسانی شد!",
+        life: 3000,
+      });
       navigate("/profile");
     } catch (err: any) {
-      console.error("Error updating profile:", err);
-      setError(err?.response?.data?.message || "خطا در بروزرسانی پروفایل");
+      toast.current?.show({
+        severity: "error",
+        summary: "خطا",
+        detail: err?.response?.data?.message || "خطا در بروزرسانی پروفایل",
+        life: 5000,
+      });
     } finally {
       setUpdateProfileLoading(false);
     }
@@ -133,17 +156,10 @@ const EditProfilePage: React.FC = () => {
   if (!userProfile) return null;
 
   return (
-    <PageContainer extraClassNames="edit-profile-page-container">
+    <PageContainer extraClassNames="edit-profile-page-container" withPadding={false}>
       <header className="edit-avatar-container">
-        {userProfile.avatarBlob ? (
-          <BlobAvatar
-            blob={userProfile.avatarBlob}
-            isBigAvatar={true}
-            handleClick={{}}
-          />
-        ) : (
-          <div className="user-big-avatar" />
-        )}
+        <BlobAvatar blob={userProfile.avatarBlob} isBigAvatar={true} />
+
         <div className="column-flex-container">
           <div className="username-big">
             {userProfile.userName || "کاربر ناشناس"}
@@ -183,8 +199,18 @@ const EditProfilePage: React.FC = () => {
           placeholder="بیوگرافی"
         />
 
-        <button disabled={updateProfileLoading} type="submit">
-          {updateProfileLoading ? "درحال بروزرسانی..." : "بروزرسانی"}
+        <button
+          className="updateBtn"
+          disabled={updateProfileLoading}
+          type="submit"
+        >
+          {updateProfileLoading ? (
+            "درحال بروزرسانی..."
+          ) : (
+            <>
+              بروزرسانی <GrUpdate />
+            </>
+          )}
         </button>
       </form>
     </PageContainer>

@@ -13,7 +13,7 @@ const UserStats = (props: UserStatsProps) => {
                 className="profile-stat-item"
                 onClick={props.fetchFollowersList}>
 
-                <b className="profile-stat-count">{props.followerCount}</b>
+                <b className="profile-stat-count">{props.followerCount?.toLocaleString("fa-IR")}</b>
                 <span className="profile-stat-label">دنبال‌کننده</span>
             </div>
             <div
@@ -21,7 +21,7 @@ const UserStats = (props: UserStatsProps) => {
                 className="profile-stat-item"
                 onClick={props.fetchFollowingsList}>
 
-                <b className="profile-stat-count">{props.followingCount}</b>
+                <b className="profile-stat-count">{props.followingCount?.toLocaleString("fa-IR")}</b>
                 <span className="profile-stat-label">دنبال‌شونده</span>
             </div>
         </div>
