@@ -1,6 +1,7 @@
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const apiBaseUrl =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: apiBaseUrl,
@@ -84,7 +85,7 @@ api.interceptors.response.use(
           failedQueue.push({ resolve, reject });
         }).then((token: any) => {
           if (originalRequest?.headers)
-          originalRequest.headers.Authorization = `Bearer ${token}`;
+            originalRequest.headers.Authorization = `Bearer ${token}`;
 
           return api(originalRequest);
         });
