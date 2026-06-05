@@ -7,6 +7,7 @@ type CommentsModalProps = {
   isLoading: boolean;
   isPosting: boolean;
   isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   setIsCommentsListOpen: (isOpen: boolean) => void;
   handleNavigateToUser: (userId: string) => void;
   handleDeleteComment: (commentId: string) => void;
@@ -18,6 +19,7 @@ const CommentsModal = ({
   isLoading,
   isPosting,
   isOpen,
+  setIsOpen,
   setIsCommentsListOpen,
   handleNavigateToUser,
   handleDeleteComment,
@@ -37,6 +39,7 @@ const CommentsModal = ({
   return (
     <Modal
       isOpen={isOpen}
+      setIsOpen={setIsOpen}
       onClose={() => setIsCommentsListOpen(false)}
       title="نظرات"
     >

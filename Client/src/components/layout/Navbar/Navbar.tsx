@@ -1,3 +1,4 @@
+import logo from "../../../assets/logo.png";
 import { useAuth } from "../../../context/AuthContext";
 import styles from "./Navbar.module.css";
 import { Link, useLocation } from "react-router-dom";
@@ -41,11 +42,7 @@ const Navbar: React.FC = () => {
       {isDesktop ? (
         <div className={styles.logoContainer}>
           <Link to="/" className={styles.logo}>
-            <img
-              src="./src/assets/logo.svg"
-              alt="لوگو"
-              className={styles.logoImage}
-            />
+            <img src={logo} alt="لوگو" className={styles.logoImage} />
           </Link>
         </div>
       ) : null}

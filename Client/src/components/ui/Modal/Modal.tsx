@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import styles from "./Modal.module.css";
 import { FaX } from "react-icons/fa6";
 
@@ -6,33 +6,26 @@ type ModalProps = {
   title?: string;
   children: ReactNode;
   isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   onClose?: () => void;
 };
 
-const Modal = ({ children, title, onClose, isOpen }: ModalProps) => {
-  const [keepOpen, setKeepOpen] = useState<boolean>(isOpen ?? false);
-
-  useEffect(() => {
-    if (isOpen) {
-      setKeepOpen(true);
-    }
-  }, [isOpen]);
-
+const Modal = ({ children, title, onClose, isOpen, setIsOpen }: ModalProps) => {
   const handleClose = () => {
     if (onClose) {
       onClose();
     }
-    setKeepOpen(false);
+    setIsOpen(false);
   };
 
   return (
     <>
       <div
-        className={`${styles.overlay} ${keepOpen ? "" : `${styles.disabled}`}`}
+        className={`${styles.overlay} ${isOpen ? "" : `${styles.disabled}`}`}
         onClick={handleClose}
       ></div>
       <div
-        className={`${styles.modal} ${keepOpen ? "" : `${styles.disabled}`}`}
+        className={`${styles.modal} ${isOpen ? "" : `${styles.disabled}`}`}
         role="dialog"
         aria-modal="true"
       >

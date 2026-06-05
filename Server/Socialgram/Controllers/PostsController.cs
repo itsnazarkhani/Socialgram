@@ -182,8 +182,6 @@ namespace Socialgram.Controllers
                 return BadRequest("شناسه کاربر نامعتبر است.");
 
             var oldPost = await _context.Posts
-                .Include(p => p.User)
-                .Include(p => p.MediaFile)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (oldPost == null) return NotFound();
             if (oldPost.UserId != userId) return Forbid();

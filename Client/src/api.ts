@@ -82,8 +82,10 @@ api.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token: string) => {
+        }).then((token: any) => {
+          if (originalRequest?.headers)
           originalRequest.headers.Authorization = `Bearer ${token}`;
+
           return api(originalRequest);
         });
       }
@@ -100,7 +102,8 @@ api.interceptors.response.use(
         saveTokens(data);
 
         processQueue(null, data.accessToken);
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        if (originalRequest.headers)
+          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
 
         return api(originalRequest);
       } catch (err) {

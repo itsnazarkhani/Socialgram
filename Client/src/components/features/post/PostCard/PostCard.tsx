@@ -18,13 +18,18 @@ import { postService } from "../../../../services/postService";
 import { userService } from "../../../../services/userService";
 import styles from "./PostCard.module.css";
 import BlobImage from "../../../ui/Image/BlobImage";
+import type { DialogType } from "../../../../types/DialogType";
+import { CiEdit } from "react-icons/ci";
+import CommentsModal from "../../commenting/CommentsModal/CommentsModal";
+import Modal from "../../../ui/Modal/Modal";
+import OkCancelDialog from "../../../ui/OkCancelDialog/OkCancelDialog";
+import TextBoxDialog from "../../../ui/TextBoxDialog/TextBoxDialog";
 import CommentForm from "../../commenting/CommentForm/CommentForm";
 import CommentList from "../../commenting/CommentList/CommentList";
-import CommentsModal from "../../commenting/CommentsModal/CommentsModal";
-import PostCaption from "../PostCaption/PostCaption";
-import ViewMeta from "../ViewMeta/ViewMeta";
-import PostHeader from "../PostHeader/PostHeader";
 import LikeMeta from "../LikeMeta/LikeMeta";
+import PostCaption from "../PostCaption/PostCaption";
+import PostHeader from "../PostHeader/PostHeader";
+import ViewMeta from "../ViewMeta/ViewMeta";
 
 type PostCardProps = {
   id?: string;
@@ -33,6 +38,13 @@ type PostCardProps = {
 const PostCard = ({ id }: PostCardProps) => {
   const navigate = useNavigate();
   const isDesktop = useIsDesktop(769);
+
+  const [dialog, setDialog] = useState<DialogType>();
+  const [updateDialogVisible, setUpdateDialogVisible] =
+    useState<boolean>(false);
+  const [deleteDialogVisible, setDeleteDialogVisible] =
+    useState<boolean>(false);
+  const [newCaption, setNewCaption] = useState<string>();
 
   const [post, setPost] = useState<PostWithDisplayData>();
   const [postCounters, setPostCounters] = useState<PostCounters>({});
@@ -116,7 +128,6 @@ const PostCard = ({ id }: PostCardProps) => {
         setLoading(false);
       }
     };
-
     fetchPostAndMedia();
   }, []);
 
@@ -294,11 +305,47 @@ const PostCard = ({ id }: PostCardProps) => {
     icon: <MdDeleteOutline />,
     label: "حذف",
     forColor: "red",
-    action: () => handleDeletePost(),
+    action: () => {
+      setDialog({
+        title: "حذف پست",
+        children: "آیا از حذف این پست مطمئن هستید؟",
+      });
+      setDeleteDialogVisible(true);
+    },
+  };
+
+  const handleUpdateCaption = async () => {
+    {
+      const res = await postService.updatePostCaption(post.id, {
+        caption: newCaption,
+      });
+      console.log(res);
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              caption: newCaption ?? "",
+            }
+          : prev,
+      );
+      setUpdateDialogVisible(false);
+    }
+  };
+
+  const editOption: ContextMenuItemData = {
+    icon: <CiEdit />,
+    label: "ویرایش",
+    action: () => {
+      setDialog({
+        title: "توضیحات پست را ویرایش کنید.",
+      });
+      setNewCaption(post?.caption ?? "");
+      setUpdateDialogVisible(true);
+    },
   };
 
   const postHeaderOptions: ContextMenuItemData[] = post.isYours
-    ? [deleteOption]
+    ? [deleteOption, editOption]
     : [];
 
   return (
@@ -308,11 +355,38 @@ const PostCard = ({ id }: PostCardProps) => {
         isLoading={loading}
         isPosting={isPostingAComment}
         isOpen={isCommentsListModalOpen}
+        setIsOpen={setIsCommentsListOpen}
         setIsCommentsListOpen={setIsCommentsListOpen}
         handleCommentFormSubmit={handleCommentFormSubmit}
         handleDeleteComment={handleDeleteComment}
         handleNavigateToUser={handleNavigateToUser}
       />
+
+      <Modal
+        isOpen={deleteDialogVisible}
+        setIsOpen={setDeleteDialogVisible}
+        title={dialog?.title}
+      >
+        <OkCancelDialog
+          onOk={() => handleDeletePost()}
+          onCancel={() => setDeleteDialogVisible(false)}
+        >
+          {dialog?.children}
+        </OkCancelDialog>
+      </Modal>
+
+      <Modal
+        isOpen={updateDialogVisible}
+        setIsOpen={setUpdateDialogVisible}
+        title={dialog?.title}
+      >
+        <TextBoxDialog
+          caption={newCaption ?? ""}
+          setCaption={setNewCaption}
+          onCancel={() => setUpdateDialogVisible(false)}
+          onSubmit={handleUpdateCaption}
+        />
+      </Modal>
 
       <div className={styles.postCard}>
         {isDesktop ? (
@@ -333,7 +407,7 @@ const PostCard = ({ id }: PostCardProps) => {
                 onDeleteComment={handleDeleteComment}
               >
                 <PostCaption
-                  caption={post.caption}
+                  caption={post?.caption}
                   extraClassNames={styles.desktopCaption}
                 />
               </CommentList>
@@ -372,7 +446,7 @@ const PostCard = ({ id }: PostCardProps) => {
                   handleLikeToggle={() => handleLikeToggle(postIdString)}
                 />
               </div>
-              <PostCaption caption={post.caption} />
+              <PostCaption caption={post?.caption} />
               {commentsCountElement}
               <ViewMeta viewCount={postCounters[post.id].viewCount} />
             </div>
