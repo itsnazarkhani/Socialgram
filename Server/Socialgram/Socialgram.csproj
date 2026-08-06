@@ -23,4 +23,8 @@
 		<PackageReference Include="NSwag.AspNetCore" Version="14.7.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\src\Socialgram.Domain\Socialgram.Domain.csproj" />
+	</ItemGroup>
+
 </Project>

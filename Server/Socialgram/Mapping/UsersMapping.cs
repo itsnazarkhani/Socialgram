@@ -1,5 +1,5 @@
 ﻿using Socialgram.DTOs;
-using Socialgram.Entities;
+using Socialgram.Domain.Entities;
 
 namespace Socialgram.Mapping
 {

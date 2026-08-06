@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialgram.Data;
-using Socialgram.Entities;
+using Socialgram.Domain.Entities;
 using Socialgram.Helpers;
 using System.Threading.Tasks;
 

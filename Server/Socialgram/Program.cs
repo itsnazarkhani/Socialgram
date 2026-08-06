@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Socialgram.Data;
-using Socialgram.Entities;
+using Socialgram.Domain.Entities;
 using Socialgram.Services;
 using Socialgram.Services.Interfaces;
 using System.Text;

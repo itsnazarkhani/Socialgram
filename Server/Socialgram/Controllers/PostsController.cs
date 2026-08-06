@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialgram.Data;
 using Socialgram.DTOs;
-using Socialgram.Entities;
+using Socialgram.Domain.Entities;
 using Socialgram.Mapping;
 using Socialgram.Services;
 using Socialgram.Services.Interfaces;

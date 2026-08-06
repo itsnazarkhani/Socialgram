@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Socialgram.Entities;
+using Socialgram.Domain.Entities;
 
 namespace Socialgram.Services.Interfaces
 {

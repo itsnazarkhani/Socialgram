@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialgram.Data;
 using Socialgram.DTOs;
-using Socialgram.Entities;
+using Socialgram.Domain.Entities;
 using Socialgram.Services;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;

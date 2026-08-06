@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Socialgram.Entities;
-using Socialgram.Entities.Interfaces;
+using Socialgram.Domain.Entities;
 
 namespace Socialgram.Data.Configurations
 {
