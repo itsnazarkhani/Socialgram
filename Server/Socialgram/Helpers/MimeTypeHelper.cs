@@ -1,5 +1,4 @@
 ﻿using MimeDetective;
-using MimeDetective.Storage;
 
 namespace Socialgram.Helpers
 {

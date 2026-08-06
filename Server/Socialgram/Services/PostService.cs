@@ -1,7 +1,7 @@
 ﻿using Socialgram.Data;
-using Socialgram.DTOs;
+using Socialgram.Application.DTOs;
 using Socialgram.Domain.Entities;
-using Socialgram.Services.Interfaces;
+using Socialgram.Application.Interfaces;
 
 namespace Socialgram.Services
 {

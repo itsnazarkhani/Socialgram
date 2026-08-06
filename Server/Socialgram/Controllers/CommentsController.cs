@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialgram.Data;
-using Socialgram.DTOs;
+using Socialgram.Application.DTOs;
 using System.Security.Claims;
 
 namespace Socialgram.Controllers

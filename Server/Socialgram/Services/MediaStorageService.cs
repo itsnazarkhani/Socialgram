@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Socialgram.Data;
+﻿using Socialgram.Data;
 using Socialgram.Domain.Entities;
 using Socialgram.Helpers;
-using Socialgram.Services.Interfaces;
-using System.Threading.Tasks;
+using Socialgram.Application.Interfaces;
 
 namespace Socialgram.Services
 {

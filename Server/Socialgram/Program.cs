@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Socialgram.Data;
 using Socialgram.Domain.Entities;
 using Socialgram.Services;
-using Socialgram.Services.Interfaces;
+using Socialgram.Application.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

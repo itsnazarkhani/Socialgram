@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Socialgram.Application/Socialgram.Application.csproj" Id="b9f71c52-8457-4bc0-85c0-f60ce5e734ca" />
     <Project Path="src/Socialgram.Domain/Socialgram.Domain.csproj" />
   </Folder>
   <Project Path="Socialgram/Socialgram.csproj" />

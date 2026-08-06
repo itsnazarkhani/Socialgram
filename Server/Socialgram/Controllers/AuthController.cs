@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialgram.Data;
-using Socialgram.DTOs;
+using Socialgram.Application.DTOs;
 using Socialgram.Domain.Entities;
 using Socialgram.Services;
 using System.Text.RegularExpressions;
