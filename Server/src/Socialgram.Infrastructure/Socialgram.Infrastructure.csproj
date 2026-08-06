@@ -5,10 +5,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
-		<PackageReference Include="Mime-Detective" Version="25.8.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.7" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.7">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+
+		<PackageReference Include="Mime-Detective" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
