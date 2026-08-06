@@ -1,0 +1,20 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Language and compiler settings -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <!-- Build settings -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+
+    <!-- Consistent output -->
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+</Project>
