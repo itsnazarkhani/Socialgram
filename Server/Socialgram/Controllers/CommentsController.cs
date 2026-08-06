@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Socialgram.Data;
+using Socialgram.Infrastructure.Data;
 using Socialgram.Application.DTOs;
 using System.Security.Claims;
 

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Socialgram.Data;
+using Socialgram.Infrastructure.Data;
 using Socialgram.Domain.Entities;
-using Socialgram.Services;
+using Socialgram.Infrastructure.Services;
 using Socialgram.Application.Interfaces;
 using System.Text;
 

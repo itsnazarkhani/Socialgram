@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Socialgram.Data;
+using Socialgram.Infrastructure.Data;
 using Socialgram.Application.DTOs;
 using Socialgram.Domain.Entities;
-using Socialgram.Services;
+using Socialgram.Infrastructure.Services;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
