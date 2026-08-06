@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Socialgram.Api/Socialgram.Api.csproj" Id="3976a0fd-dc2f-4bd9-9c73-a009ee414377" />
     <Project Path="src/Socialgram.Application/Socialgram.Application.csproj" Id="b9f71c52-8457-4bc0-85c0-f60ce5e734ca" />
