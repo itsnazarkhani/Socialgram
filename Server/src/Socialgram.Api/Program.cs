@@ -91,4 +91,3 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi();
 }
 app.Run();
-throw new Exception("f");
