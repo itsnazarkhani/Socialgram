@@ -9,10 +9,25 @@ using Socialgram.Domain.Entities;
 using Socialgram.Infrastructure.Services;
 using Socialgram.Application.Interfaces;
 using System.Text;
+using Asp.Versioning;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services
+    .AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = false;
+        options.ReportApiVersions = true;
+        options.ApiVersionReader = new UrlSegmentApiVersionReader();
+    })
+    .AddMvc()
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
 
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
@@ -58,11 +73,11 @@ builder.Services.AddTransient<PostService>();
 
 builder.Services.AddOpenApiDocument(config =>
 {
+    config.DocumentName = "v1";
     config.Title = "Socialgram API";
     config.Version = "v1";
-    config.Description = "Socialgram API documentation";
+    config.Description = "Socialgram API v1 documentation";
 
-    // JWT support
     config.AddSecurity("Bearer", new OpenApiSecurityScheme
     {
         Type = OpenApiSecuritySchemeType.Http,
@@ -71,7 +86,8 @@ builder.Services.AddOpenApiDocument(config =>
         Description = "Enter your JWT token"
     });
 
-    config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("Bearer"));
+    config.OperationProcessors.Add(
+        new AspNetCoreOperationSecurityScopeProcessor("Bearer"));
 });
 
 var app = builder.Build();
@@ -88,6 +104,9 @@ app.MapHealthChecks("/healthz");
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
-    app.UseSwaggerUi();
+    app.UseSwaggerUi(settings =>
+    {
+        settings.DocumentPath = "/swagger/{documentName}/swagger.json";
+    });
 }
 app.Run();

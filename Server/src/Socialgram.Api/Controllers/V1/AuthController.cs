@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +9,13 @@ using Socialgram.Domain.Entities;
 using Socialgram.Infrastructure.Services;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
-namespace Socialgram.Api.Controllers
+namespace Socialgram.Api.Controllers.V1
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AuthController(AuthService userService,
         SocialgramDbContext context) : ControllerBase
     {

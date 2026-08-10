@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Socialgram.Infrastructure.Data;
 using Socialgram.Application.DTOs;
-using System.Security.Claims;
+using Socialgram.Infrastructure.Data;
 
-namespace Socialgram.Api.Controllers
+namespace Socialgram.Api.Controllers.V1
 {
-    [Authorize]
-    [Route("api/[Controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class CommentsController(SocialgramDbContext context) : ControllerBase
     {
         private readonly SocialgramDbContext _context = context;

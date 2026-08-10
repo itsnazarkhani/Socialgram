@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Socialgram.Infrastructure.Data;
 using Socialgram.Application.DTOs;
-using Socialgram.Domain.Entities;
 using Socialgram.Application.Mapping;
+using Socialgram.Domain.Entities;
+using Socialgram.Infrastructure.Data;
 using Socialgram.Infrastructure.Services;
-using System.Security.Claims;
 
-namespace Socialgram.Api.Controllers
+namespace Socialgram.Api.Controllers.V1
 {
-    [Authorize]
-    [Route("api/[Controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class UsersController(
         SocialgramDbContext context,
         AvatarStorageService avatarStorageService) : ControllerBase
